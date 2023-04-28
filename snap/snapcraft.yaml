@@ -26,15 +26,22 @@ parts:
       - libgranite-dev
     stage-packages:
       - python3-gst-1.0
+      - python3-requests
+      - python3-distro
+      - python3-tz
+      - python3-mutagen
+      - python3-peewee
+      - python3-cairo
+      - python3-apsw
     override-pull: |
       craftctl default
       patch -p1 < $CRAFT_PROJECT_DIR/patches/meson.patch
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages requests
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages packaging
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages pytz
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages requests
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages packaging
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee
+      #pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages pytz
     override-build: |
       craftctl default
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/cozy/current/usr/bin/com.github.geigi.cozy"
