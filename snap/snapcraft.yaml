@@ -28,6 +28,7 @@ parts:
       - python3-gst-1.0
     override-pull: |
       craftctl default
+      patch -p1 < $CRAFT_PROJECT_DIR/patches/meson.patch
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages requests
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen
