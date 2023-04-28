@@ -19,7 +19,7 @@ parts:
     source: https://github.com/geigi/cozy.git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
-      - --preifx=/snap/cozy/current/usr
+      - --prefix=/snap/cozy/current/usr
     build-packages:
       - libgranite-dev
     override-build: |
