@@ -53,6 +53,7 @@ apps:
     command: usr/bin/com.github.geigi.cozy
     common-id: com.github.geigi.cozy
     desktop: usr/share/applications/com.github.geigi.cozy.desktop
+    extensions: [ gnome ]
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
