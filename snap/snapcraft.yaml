@@ -1,0 +1,63 @@
+name: cozy # you probably want to 'snapcraft register <name>'
+base: core22 # the base snap is the execution environment for this snap
+version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
+adopt-info: cozy
+icon: com.github.geigi.cozy.svg
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+
+slots:
+  cozy-mpris:
+    interface: mpris
+    name: Cozy
+parts:
+  cozy:
+    # See 'snapcraft plugins'
+    plugin: meson
+    source: https://github.com/geigi/cozy.git
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
+    meson-parameters:
+      - --preifx=/snap/cozy/current/usr
+    build-packages:
+      - libgranite-dev
+    override-build: |
+      craftctl default
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages requests
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages packaging
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages pytz
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages
+      sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/cozy/current/usr/bin/com.github.geigi.cozy"
+    organize:
+      snap/cozy/current/usr: usr
+    parse-info: [ usr/share/metainfo/com.github.geigi.cozy.appdata.xml ]
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - cozy
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core22
+      - gtk-common-themes
+      - gnome-42-2204
+    override-prime: |
+      set -eux
+      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
+apps:
+  cozy:
+    command: usr/bin/com.github.geigi.cozy
+    common-id: com.github.geigi.cozy
+    desktop: usr/share/applications/com.github.geigi.cozy.desktop
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
+    plugs:
+      - home
+      - removable-media
+    slots:
+      - cozy-mpris
