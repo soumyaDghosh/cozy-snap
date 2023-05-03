@@ -37,7 +37,7 @@ parts:
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro==1.7.0
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen==1.45.1
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages packaging==21.3
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee==3.15.1
+      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee==3.15.2
       pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages pytz==2022.1
     override-build: |
       craftctl default
