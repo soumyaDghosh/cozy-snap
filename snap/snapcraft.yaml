@@ -14,6 +14,10 @@ slots:
   cozy-mpris:
     interface: mpris
     name: Cozy
+  cozy:
+    interface: dbus
+    bus: session
+    name: com.github.geigi.cozy
 parts:
   cozy:
     # See 'snapcraft plugins'
@@ -58,12 +62,6 @@ plugs:
   # required to use multiprocessing semaphores
   shared-memory:
     private: true
-
-slots:
-  cozy:
-    interface: dbus
-    bus: session
-    name: com.github.geigi.cozy
 apps:
   cozy:
     command: usr/bin/com.github.geigi.cozy
