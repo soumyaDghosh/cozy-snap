@@ -81,5 +81,6 @@ apps:
       - home
       - shared-memory
       - removable-media
+      - mount-observe
     slots:
       - cozy-mpris
