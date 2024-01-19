@@ -70,7 +70,7 @@ apps:
     extensions: [ gnome ]
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
-      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib
+      GDK_DEBUG: 'portals'
     plugs:
       - audio-playback
       - home
