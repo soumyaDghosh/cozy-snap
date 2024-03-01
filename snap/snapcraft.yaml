@@ -3,8 +3,6 @@ base: core22
 adopt-info: cozy
 grade: stable 
 confinement: strict 
-environment:
-  PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
 
 architectures:
   - build-on: amd64
@@ -19,6 +17,7 @@ slots:
     interface: dbus
     bus: session
     name: com.github.geigi.cozy
+
 parts:
   cozy:
     plugin: meson
@@ -31,37 +30,56 @@ parts:
       - libgranite-dev
     stage-packages:
       - python3-gst-1.0
-    override-pull: |
-      craftctl default
-      patch -p1 < $CRAFT_PROJECT_DIR/patches/meson.patch
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages requests==2.28.1
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages distro==1.7.0
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages mutagen==1.45.1
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages packaging==21.3
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages peewee
-      pip install --target=$CRAFT_PART_INSTALL/snap/cozy/current/usr/lib/python3/dist-packages pytz==2022.1
     override-build: |
       craftctl default
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/cozy/current/usr/bin/com.github.geigi.cozy"
     organize:
       snap/cozy/current/usr: usr
     parse-info: [ usr/share/metainfo/com.github.geigi.cozy.appdata.xml ]
-  cleanup:
-    after:  
-      - cozy
-    plugin: nil
-    build-snaps:  
-      - core22
-      - gtk-common-themes
-      - gnome-42-2204
-    override-prime: |
-      set -eux
-      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
-      done
+
+  python-deps:
+    after: cozy
+    source: .
+    plugin: python
+    python-packages:
+      - distro==1.9.0
+      - mutagen==1.47.0
+      - peewee==3.17.1
+      - pytz==2024.1
+      - requests==2.31.0
+    build-environment:
+      # WORKAROUND: The python plugin is broken with gnome extension
+      - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
+      - PYTHONPATH: ""
+    prime:
+      - -snap
+      - -usr/bin/activate
+      - -usr/bin/activate.csh
+      - -usr/bin/activate.fish
+      - -usr/bin/Activate.ps1
+      - -usr/bin/python
+      - -usr/bin/python3
+      - -usr/bin/python3.10
+      - -usr/bin/pip
+      - -usr/bin/pip3
+      - -usr/bin/pip3.10
+      - -usr/bin/wheel
+      - -usr/lib/python3.10/dist-packages/pip*
+      - -usr/lib/python3.10/dist-packages/pkg_resources
+      - -usr/lib/python3.10/dist-packages/setuptools*
+      - -pyvenv.cfg
+      - -lib
+      - -lib64
+      - -include
+      - -share
+    organize:
+      bin: usr/bin
+      lib/python3.10/site-packages: usr/lib/python3/dist-packages
+
 plugs:
   shared-memory:
     private: true
+
 apps:
   cozy:
     command: usr/bin/com.github.geigi.cozy
