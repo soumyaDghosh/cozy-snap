@@ -20,10 +20,13 @@ slots:
 
 parts:
   cozy:
+    after: [python-deps]
     plugin: meson
     source: https://github.com/geigi/cozy.git
     source-tag: '1.3.0'
     source-depth: 1
+    build-environment:
+      - PYTHONPATH: ${CRAFT_STAGE}/usr/lib/python3/dist-packages:${PYTHONPATH}
     meson-parameters:
       - --prefix=/snap/cozy/current/usr
     build-packages:
