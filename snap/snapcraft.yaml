@@ -41,8 +41,6 @@ parts:
     parse-info: [ usr/share/metainfo/com.github.geigi.cozy.appdata.xml ]
 
   python-deps:
-    after:
-      - cozy
     source: .
     plugin: python
     python-packages:
