@@ -31,8 +31,6 @@ parts:
       - --prefix=/snap/cozy/current/usr
     build-packages:
       - libgranite-dev
-    stage-packages:
-      - python3-gst-1.0
     override-build: |
       craftctl default
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/cozy/current/usr/bin/com.github.geigi.cozy"
