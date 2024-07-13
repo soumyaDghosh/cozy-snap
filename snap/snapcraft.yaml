@@ -1,13 +1,13 @@
 name: cozy 
-base: core22 
+base: core24 
 adopt-info: cozy
 grade: stable 
 confinement: strict 
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
+platforms:
+  amd64:
+  arm64:
+  armhf:
 
 slots:
   cozy-mpris:
@@ -35,7 +35,7 @@ parts:
       craftctl default
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/cozy/current/usr/bin/com.github.geigi.cozy"
     organize:
-      snap/cozy/current/usr: usr
+      snap/cozy/current: .
     parse-info: [ usr/share/metainfo/com.github.geigi.cozy.appdata.xml ]
 
   python-deps:
@@ -47,26 +47,16 @@ parts:
       - peewee==3.17.1
       - pytz==2024.1
       - requests==2.31.0
-    build-environment:
-      # WORKAROUND: The python plugin is broken with gnome extension
-      - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
-      - PYTHONPATH: ""
     prime:
       - -snap
-      - -usr/bin/activate
-      - -usr/bin/activate.csh
-      - -usr/bin/activate.fish
+      - -usr/bin/activate*
       - -usr/bin/Activate.ps1
-      - -usr/bin/python
-      - -usr/bin/python3
-      - -usr/bin/python3.10
-      - -usr/bin/pip
-      - -usr/bin/pip3
-      - -usr/bin/pip3.10
+      - -usr/bin/python*
+      - -usr/bin/pip*
       - -usr/bin/wheel
-      - -usr/lib/python3.10/dist-packages/pip*
-      - -usr/lib/python3.10/dist-packages/pkg_resources
-      - -usr/lib/python3.10/dist-packages/setuptools*
+      - -usr/lib/python3.12/dist-packages/pip*
+      - -usr/lib/python3.12/dist-packages/pkg_resources
+      - -usr/lib/python3.12/dist-packages/setuptools*
       - -pyvenv.cfg
       - -lib
       - -lib64
@@ -74,7 +64,7 @@ parts:
       - -share
     organize:
       bin: usr/bin
-      lib/python3.10/site-packages: usr/lib/python3/dist-packages
+      lib/python3.12/site-packages: usr/lib/python3/dist-packages
 
   deps:
     after: [cozy]
